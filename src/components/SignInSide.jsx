@@ -34,15 +34,47 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    /*console.log({
+      username: data.get('username'),
       password: data.get('password'),
-    });
+    });*/
+
+    /*let  headers = new Headers();
+    headers.set('Authorization', 'Basic ' + data.get('username') + ':' + data.get('password'));
+    console.log(headers.get('Authorization'))*/
+    
+  const postData = {
+    username: data.get('username'),
+    password: data.get('password')
+  };
+    // Make the fetch request
+    fetch("http://localhost:8000/login", {
+      method: 'POST',
+      headers: new Headers({
+			  //'Authorization': 'Basic ' + btoa(data.get('username') + ':' + data.get('password')),
+        'Content-Type': 'application/json'
+    }),
+      body: JSON.stringify(postData),
+      mode: 'no-cors' // Set mode to no-cors
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response:', data);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: 'auto' }}>
         <CssBaseline />
         <Grid
           item
@@ -50,7 +82,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: 'url(src/assets/logo.svg)', //'url(https://source.unsplash.com/random?wallpapers)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -79,10 +111,10 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
               <TextField
@@ -95,10 +127,10 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
+              {/*<FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+          />*/}
               <Button
                 type="submit"
                 fullWidth
@@ -108,18 +140,18 @@ export default function SignInSide() {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
+                {/*<Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
-                </Grid>
+          </Grid>*/}
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              {/*<Copyright sx={{ mt: 5 }} />*/}
             </Box>
           </Box>
         </Grid>
