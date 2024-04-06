@@ -12,6 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -31,47 +32,30 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const [error, setError] = React.useState(null);
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    /*console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });*/
-
-    /*let  headers = new Headers();
-    headers.set('Authorization', 'Basic ' + data.get('username') + ':' + data.get('password'));
-    console.log(headers.get('Authorization'))*/
     
   const postData = {
     username: data.get('username'),
     password: data.get('password')
   };
-    // Make the fetch request
-    fetch("http://localhost:8000/login", {
-      method: 'POST',
-      headers: new Headers({
-			  //'Authorization': 'Basic ' + btoa(data.get('username') + ':' + data.get('password')),
-        'Content-Type': 'application/json'
-    }),
-      body: JSON.stringify(postData),
-      mode: 'no-cors' // Set mode to no-cors
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    try {
+      const response = await axios.post("/api/login", postData, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Response:', data);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
       });
-
+      console.log('Response:', response.data);
+      setError(null); // Clear any previous error
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error.message);
+      setError(error.message); // Set error message
+    }
   };
 
+  //};
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: 'auto' }}>
@@ -82,7 +66,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(src/assets/logo.svg)', //'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: 'url(src/assets/logo-big.jpg)', //'url(https://source.unsplash.com/random?wallpapers)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -126,7 +110,11 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
+              /> {error && ( // Display error if exists
+                <Typography color="error" align="center" variant="body2" sx={{ mt: 1 }}>
+                  {error}
+                </Typography>
+              )}
               {/*<FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
