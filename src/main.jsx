@@ -7,15 +7,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import SignInSide from './components/SignInSide.jsx';
+import SignUp from './components/SignUp.jsx';
 
-
-/*    path: "contacts/:contactId",
-    element: <Contact />, 
-    https://reactrouter.com/en/main/start/tutorial*/
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <SignInSide />
+  },
+  {
+    path: "/register",
+    element: <SignUp />
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -47,8 +47,11 @@ export default function SignInSide() {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Response:', response.data);
-      setError(null); // Clear any previous error
+      if (response.data['status'] === 1){
+        throw new Error(response.data['message'])
+      }else{
+        setError(null); // Clear any previous error
+      }
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error.message);
       setError(error.message); // Set error message
