@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 function Copyright(props) {
   return (
@@ -32,7 +33,18 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const [user, setUser] = React.useState();
   const [error, setError] = React.useState(null);
+  const navigate = useNavigate()
+
+  // useEffect to log the effect of setUser
+  React.useEffect(() => {
+      console.log("User set to:", user);
+    }, [user]); // Run the effect whenever 'user' changes
+
+  const userContext = React.createContext()
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -51,6 +63,9 @@ export default function SignInSide() {
         throw new Error(response.data['message'])
       }else{
         setError(null); // Clear any previous error
+        setUser(response.data['sid'])
+        //sessionStorage.setItem('Cookie', response.data['sid'])
+        navigate("/dashboard")
       }
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error.message);
@@ -60,6 +75,7 @@ export default function SignInSide() {
 
   //};
   return (
+    <><userContext.Provider value={user} />
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: 'auto' }}>
         <CssBaseline />
@@ -71,12 +87,10 @@ export default function SignInSide() {
           sx={{
             backgroundImage: 'url(src/assets/logo-big.jpg)', //'url(https://source.unsplash.com/random?wallpapers)',
             backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-          }}
-        />
+          }} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
@@ -102,8 +116,7 @@ export default function SignInSide() {
                 label="Username"
                 name="username"
                 autoComplete="username"
-                autoFocus
-              />
+                autoFocus />
               <TextField
                 margin="normal"
                 required
@@ -112,16 +125,15 @@ export default function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
-              /> {error && ( // Display error if exists
-                <Typography color="error" align="center" variant="body2" sx={{ mt: 1 }}>
-                  {error}
-                </Typography>
-              )}
+                autoComplete="current-password" /> {error && ( // Display error if exists
+                  <Typography color="error" align="center" variant="body2" sx={{ mt: 1 }}>
+                    {error}
+                  </Typography>
+                )}
               {/*<FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-          />*/}
+      control={<Checkbox value="remember" color="primary" />}
+      label="Remember me"
+/>*/}
               <Button
                 type="submit"
                 fullWidth
@@ -132,10 +144,10 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 {/*<Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-          </Grid>*/}
+      <Link href="#" variant="body2">
+        Forgot password?
+      </Link>
+</Grid>*/}
                 <Grid item>
                   <Link href="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
@@ -147,6 +159,6 @@ export default function SignInSide() {
           </Box>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </ThemeProvider></>
   );
 }
