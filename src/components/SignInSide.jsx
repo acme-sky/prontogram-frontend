@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function Copyright(props) {
   return (
@@ -28,8 +29,8 @@ function Copyright(props) {
   );
 }
 
+export const userContext = React.createContext()
 // TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
@@ -42,13 +43,29 @@ export default function SignInSide() {
       console.log("User set to:", user);
     }, [user]); // Run the effect whenever 'user' changes
 
-  const userContext = React.createContext()
+  
 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
+
+    const isEmptyField = Object.values({
+      username: data.get('username'),
+      password: data.get('password')
+    }).some(value => value.trim() === '');
+
+    if (isEmptyField) {
+      // If any field is empty, display an error
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please fill in all the fields.",
+      });
+      return;
+    }
+
+
   const postData = {
     username: data.get('username'),
     password: data.get('password')
@@ -63,8 +80,8 @@ export default function SignInSide() {
         throw new Error(response.data['message'])
       }else{
         setError(null); // Clear any previous error
-        setUser(response.data['sid'])
-        //sessionStorage.setItem('Cookie', response.data['sid'])
+        setUser(postData.username)
+        localStorage.setItem('session', response.data['sid'])
         navigate("/dashboard")
       }
     } catch (error) {

@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 function Copyright(props) {
   return (
@@ -32,29 +33,67 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+
+  const [error, setError] = React.useState(null);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    //check empty fields
+    const isEmptyField = Object.values({
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+      username: data.get('username'),
+      password: data.get('password')
+    }).some(value => value.trim() === '');
+
+    if (isEmptyField) {
+      // If any field is empty, display an error
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please fill in all the fields.",
+      });
+      //throw new Error("Empty fields ")
+      setError("Empty fields")
+      return;
+    }else{
     const postData = {
         username: data.get('username'),
         password: data.get('password'),
         name: data.get('firstName'),
         surname: data.get('lastName')
     };
+
     try {
-      const response = await axios.post("/api/register", data, {
+      const response = await axios.post("/api/register", postData, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log('Response:', response.data);
-      setError(null); // Clear any previous error
-    } catch (error) {
-      console.error('There was a problem with the fetch operation:', error.message);
-      setError(error.message); // Set error message
-    }
-  };
+      if (response.data['status'] === 1){
+        throw new Error(response.data['message'])
+      }else{
+        setError(null)
+        // pop up successo + link a login      
+        Swal.fire({
+          icon: "success",
+          title: "Welcome!",
+          text: "The user "+postData.username+" has been successfully registered!",
+          footer: '<a href="/login">Go to login page</a>'
+        });
+      }
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error.message);
+        //setError(error.message); // Set error message
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong! Choose a different username!",
+        });
+      }
+    };
+  }
 
 
   return (
@@ -104,7 +143,7 @@ export default function SignUp() {
                   fullWidth
                   id="username"
                   label="Username"
-                  name="Username"
+                  name="username"
                   autoComplete="username"
                 />
               </Grid>
