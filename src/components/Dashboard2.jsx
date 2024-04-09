@@ -15,9 +15,9 @@ import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems, secondaryListItems } from './listItems';
 import Orders from './Orders';
 import Orders_better from './Orders2';
+import LogoutButton from './listItems';
 
 function Copyright(props) {
   return (
@@ -141,9 +141,9 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            <LogoutButton />
+            {/*<Divider sx={{ my: 1 }} />
+            {secondaryListItems}*/}
           </List>
         </Drawer>
         <Box
