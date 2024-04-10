@@ -18,6 +18,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Orders from './Orders';
 import Orders_better from './Orders2';
 import LogoutButton from './listItems';
+import Chat from './Chat'
 
 function Copyright(props) {
   return (
@@ -164,6 +165,7 @@ export default function Dashboard() {
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%' ,backgroundColor: 'transparent'}}>
                   <Orders_better />
+                  {/*<Chat />*/}
                 </Paper>
               </Grid>
             </Grid>
