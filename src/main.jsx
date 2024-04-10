@@ -11,6 +11,7 @@ import SignUp from './components/SignUp.jsx';
 import Orders from './components/Orders.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import Dashboard2 from './components/Dashboard2.jsx';
+import Dashboard3 from './components/Dashboard3.jsx';
 
 const router = createBrowserRouter([
   {

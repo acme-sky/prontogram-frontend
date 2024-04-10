@@ -94,7 +94,7 @@ export default function SignInSide() {
   return (
     <><userContext.Provider value={user} />
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: 'auto' }}>
+      <Grid container component="main" sx={{ height: 'auto', width:'50%', marginLeft: 'auto', marginRight:'auto' }}>
         <CssBaseline />
         <Grid
           item

@@ -15,10 +15,8 @@ import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Orders from './Orders';
-import Orders_better from './Orders2';
-import LogoutButton from './listItems';
-import Chat from './Chat'
+import Chat from './Dashboard3';
+import LogoutButton from './listItems'
 
 function Copyright(props) {
   return (
@@ -44,6 +42,8 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+  backdropFilter: 'blur(10px)', // Blur effect
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -65,6 +65,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         duration: theme.transitions.duration.enteringScreen,
       }),
       boxSizing: 'border-box',
+      paddingRight: theme.spacing(3), // Add padding to create space between drawer and chat
       ...(!open && {
         overflowX: 'hidden',
         transition: theme.transitions.create('width', {
@@ -80,7 +81,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
@@ -91,14 +91,10 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex' , height: '100vh',}}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
             <IconButton
               edge="start"
               color="inherit"
@@ -111,65 +107,32 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
+            <Typography variant="h6" noWrap>
               Prontogram
             </Typography>
-            {/*<IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>*/}
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
+          <Toolbar>
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
-            <LogoutButton />
-            {/*<Divider sx={{ my: 1 }} />
-            {secondaryListItems}*/}
+          <List>
+            <LogoutButton />{/* Your list items */}
           </List>
         </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: 'white',
-            flexGrow: 1,
-            height: `calc(100vh - 64px)`, // Adjust height to fill almost all the main page
-            width: `calc(100vh - 64px)`, // Adjust height to fill almost all the main page
-            overflow: 'auto',
-            padding: '20px', // Add padding for spacing
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg">
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Toolbar /> {/* Spacer for app bar */}
+          <Container>
             <Grid container spacing={3}>
-              {/* Render your content here */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%' ,backgroundColor: 'transparent'}}>
-                  <Orders_better />
-                  {/*<Chat />*/}
+                <Paper sx={{ p: 2 }}>
+                  <Chat />
                 </Paper>
               </Grid>
             </Grid>
-            {/*<Copyright sx={{ pt: 4 }} />*/}
           </Container>
         </Box>
       </Box>
