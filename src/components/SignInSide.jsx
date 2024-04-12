@@ -82,6 +82,7 @@ export default function SignInSide() {
         setError(null); // Clear any previous error
         setUser(postData.username)
         localStorage.setItem('session', response.data['sid'])
+        localStorage.setItem('user', postData.username)
         navigate("/dashboard")
       }
     } catch (error) {
@@ -92,90 +93,91 @@ export default function SignInSide() {
 
   //};
   return (
-    <><userContext.Provider value={user} />
-    <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: 'auto', width:'50%', marginLeft: 'auto', marginRight:'auto' }}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(src/assets/logo-big.jpg)', //'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }} />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
+    <userContext.Provider value={user}>
+      <ThemeProvider theme={defaultTheme}>
+        <Grid container component="main" sx={{ height: 'auto', width:'50%', marginLeft: 'auto', marginRight:'auto' }}>
+          <CssBaseline />
+          <Grid
+            item
+            xs={false}
+            sm={4}
+            md={7}
             sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password" /> {error && ( // Display error if exists
-                  <Typography color="error" align="center" variant="body2" sx={{ mt: 1 }}>
-                    {error}
-                  </Typography>
-                )}
-              {/*<FormControlLabel
-      control={<Checkbox value="remember" color="primary" />}
-      label="Remember me"
-/>*/}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                {/*<Grid item xs>
-      <Link href="#" variant="body2">
-        Forgot password?
-      </Link>
-</Grid>*/}
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+              backgroundImage: 'url(src/assets/logo-big.jpg)', //'url(https://source.unsplash.com/random?wallpapers)',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }} />
+          <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+            <Box
+              sx={{
+                my: 8,
+                mx: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  autoFocus />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password" /> {error && ( // Display error if exists
+                    <Typography color="error" align="center" variant="body2" sx={{ mt: 1 }}>
+                      {error}
+                    </Typography>
+                  )}
+                {/*<FormControlLabel
+        control={<Checkbox value="remember" color="primary" />}
+        label="Remember me"
+  />*/}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
+                </Button>
+                <Grid container>
+                  {/*<Grid item xs>
+        <Link href="#" variant="body2">
+          Forgot password?
+        </Link>
+  </Grid>*/}
+                  <Grid item>
+                    <Link href="/register" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
-              {/*<Copyright sx={{ mt: 5 }} />*/}
+                {/*<Copyright sx={{ mt: 5 }} />*/}
+              </Box>
             </Box>
-          </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </ThemeProvider></>
+      </ThemeProvider>
+    </userContext.Provider>
   );
 }

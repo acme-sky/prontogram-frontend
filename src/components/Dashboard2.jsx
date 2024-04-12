@@ -17,6 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Chat from './Dashboard3';
 import LogoutButton from './listItems'
+import { userContext } from './SignInSide';
 
 function Copyright(props) {
   return (
@@ -42,7 +43,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+  backgroundColor: 'rgba(0, 0, 250, 0.6)', // Semi-transparent black background
   backdropFilter: 'blur(10px)', // Blur effect
   ...(open && {
     marginLeft: drawerWidth,
@@ -84,12 +85,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const user = React.useContext(userContext)
 
   return (
+    <userContext.Provider value={user}>
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' , height: '100vh',}}>
         <CssBaseline />
@@ -137,5 +140,6 @@ export default function Dashboard() {
         </Box>
       </Box>
     </ThemeProvider>
+</userContext.Provider>
   );
 }

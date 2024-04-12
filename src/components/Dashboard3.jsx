@@ -13,7 +13,11 @@ import Avatar from '@mui/material//Avatar'
 import Fab from '@mui/material/Fab'
 import SendIcon from '@mui/icons-material/Send'
 import logo from '/src/assets/logo-big.jpg'
-
+import { userContext } from './SignInSide'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import * as React from 'react'
 
 const useStyles = makeStyles({
     table:{
@@ -32,14 +36,68 @@ const useStyles = makeStyles({
     messageArea: {
         height: '70vh',
         overflowY: 'auto'
+    },
+    messageContainer: {
+        backgroundColor: 'rgba(61, 155, 227, 0.4)',
+        padding: '10px',
+        borderRadius: '25px',
+        maxWidth: '60%'
+    },
+    people:{
+        backgroundColor: 'rgba(0,0,250, 0.3)',
+        borderRadius: '15px'
     }
 })
 
 
 export default function Chat(){
     const classes = useStyles();
+    //const user = React.useContext(userContext)
+    const user = localStorage.getItem('user')
+    const [messages, setMessages] = React.useState([])
+    const navigate = useNavigate()
+
+    React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const cookie = localStorage.getItem('session')
+        // Check if cookie exists before making the request
+        if (!cookie) {
+          //console.error('Cookie not found in session storage');
+          console.log('Cookie not found');
+          //popup error with redirection
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "User is not authenticated!",
+            footer: '<a href="/login">Go to login page</a>'
+          });
+        }
+
+        // Make the request to the API endpoint with the cookie
+        const response = await axios.get(`/api/getMessages/`+user);
+        setMessages(response.data.messages);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        if (error.message == "User not authenticated"){
+          navigate("/login")
+          throw new Error("User not authenticated")
+        }
+      }
+    };
+
+    fetchData();
+
+    // Clean-up function to cancel any ongoing requests (if necessary)
+    return () => {
+      // You can perform cleanup here if needed
+    };
+  }, [user, navigate]); // Empty dependency array ensures the effect runs only once after the initial render
+
+
 
     return (
+    <userContext.Provider value={user}>
       <div>
         <Grid container>
             <Grid item xs={12} >
@@ -49,11 +107,11 @@ export default function Chat(){
         <Grid container component={Paper} className={classes.chatSection}>
             <Grid item xs={3} className={classes.borderRight500}>
                 <List>
-                    <ListItem button key="RemySharp">
+                    <ListItem button >
                         <ListItemIcon>
-                        <Avatar alt="Remy Sharp" src={logo} />
+                        <Avatar alt="user"/>
                         </ListItemIcon>
-                        <ListItemText primary="John Wick"></ListItemText>
+                        <ListItemText primary={user}></ListItemText>
                     </ListItem>
                 </List>
                 <Divider />
@@ -61,60 +119,30 @@ export default function Chat(){
                     <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
                 </Grid>
                 <Divider />
-                <List>
-                    <ListItem button key="RemySharp">
+                <List className={classes.people}>
+                    <ListItem button key="AcmeSky">
                         <ListItemIcon>
-                            <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                            <Avatar alt="AcmeSky" src={logo}/>
                         </ListItemIcon>
-                        <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
+                        <ListItemText primary="AcmeSky">AcmeSky</ListItemText>
                         <ListItemText secondary="online" align="right"></ListItemText>
-                    </ListItem>
-                    <ListItem button key="Alice">
-                        <ListItemIcon>
-                            <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Alice">Alice</ListItemText>
-                    </ListItem>
-                    <ListItem button key="CindyBaker">
-                        <ListItemIcon>
-                            <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
                     </ListItem>
                 </List>
             </Grid>
             <Grid item xs={9}>
                 <List className={classes.messageArea}>
-                    <ListItem key="1">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" primary="Hey man, What's up ?"></ListItemText>
+                    {messages.map((message, index) => (
+                        <ListItem key={index}>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <div className={classes.messageContainer} dangerouslySetInnerHTML={{ __html: message.full_text }}></div>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <ListItemText align="right" secondary="09:30"></ListItemText>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" secondary="09:30"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <ListItem key="2">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText align="left" primary="Hey, Iam Good! What about you ?"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText align="left" secondary="09:31"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <ListItem key="3">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" primary="Cool. i am good, let's catch up!"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" secondary="10:30"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
+                        </ListItem>
+                    ))}
                 </List>
                 <Divider />
                 <Grid container style={{padding: '20px'}}>
@@ -128,5 +156,6 @@ export default function Chat(){
             </Grid>
         </Grid>
       </div>
+      </userContext.Provider>
   );
 }
