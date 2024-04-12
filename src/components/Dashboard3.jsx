@@ -38,13 +38,14 @@ const useStyles = makeStyles({
         overflowY: 'auto'
     },
     messageContainer: {
-        backgroundColor: 'rgba(61, 155, 227, 0.4)',
+        backgroundColor: 'rgba(61, 155, 250, 0.3)',
         padding: '10px',
         borderRadius: '25px',
-        maxWidth: '60%'
+        maxWidth: '60%',
+        boxShadow: '5px 10px 5px lightgrey'
     },
     people:{
-        backgroundColor: 'rgba(0,0,250, 0.3)',
+        backgroundColor: 'rgba(0,136,204, 1)',
         borderRadius: '15px'
     }
 })
@@ -138,7 +139,7 @@ export default function Chat(){
                                     <div className={classes.messageContainer} dangerouslySetInnerHTML={{ __html: message.full_text }}></div>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ListItemText align="right" secondary="09:30"></ListItemText>
+                                    <ListItemText align="right" secondary={message.arrived_timestamp}></ListItemText>
                                 </Grid>
                             </Grid>
                         </ListItem>

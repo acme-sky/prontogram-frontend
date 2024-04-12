@@ -34,6 +34,26 @@ function Copyright(props) {
 
 const drawerWidth = 240;
 
+/*const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  position: 'fixed',
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  backgroundColor: 'rgba(61,155,227, 1)', // Semi-transparent black background
+  backdropFilter: 'blur(10px)', // Blur effect
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));*/
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -43,8 +63,13 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: 'rgba(0, 0, 250, 0.6)', // Semi-transparent black background
+  backgroundColor: '#0088cc', // Telegram blue color
   backdropFilter: 'blur(10px)', // Blur effect
+  fontFamily: 'Arial, sans-serif', // Good font family
+  color: '#ffffff', // White text color
+  '& .MuiTypography-root': {
+    fontFamily: 'Arial, sans-serif', // Good font family for text elements
+  },
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
