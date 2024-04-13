@@ -46,7 +46,7 @@ const LogoutButton = () => {
       <ListItemIcon>
         <LogoutIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" />
+      <ListItemText secondary="Logout" />
     </ListItemButton>
   );
 };

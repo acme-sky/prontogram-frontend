@@ -18,7 +18,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Chat from './Dashboard3';
 import LogoutButton from './listItems'
 import { userContext } from './SignInSide';
-
+import logo from '/src/assets/logo-big.jpg'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -63,7 +63,33 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  backgroundColor: '#0088cc', // Telegram blue color
+  backgroundColor: 'white', 
+  //backdropFilter: 'blur(10px)', // Blur effect
+  fontFamily: 'Arial, sans-serif', // Good font family
+  color: 'lightskyblue',
+  '& .MuiTypography-root': {
+    fontFamily: 'Arial, sans-serif', // Good font family for text elements
+    color: open ? 'lightblue' : 'inherit', // Light blue color when open
+  },
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+/*const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  position: 'fixed',
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  backgroundColor: 'white', 
   backdropFilter: 'blur(10px)', // Blur effect
   fontFamily: 'Arial, sans-serif', // Good font family
   color: '#ffffff', // White text color
@@ -78,7 +104,7 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
-}));
+}));*/
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -135,14 +161,15 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
+            <Typography variant="h4" noWrap>
               Prontogram
             </Typography>
+            <img src={logo} alt="Logo" style={{ marginLeft: 'auto', height: '80px' }} />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
           <Toolbar>
-            <IconButton onClick={toggleDrawer}>
+            <IconButton onClick={toggleDrawer} position="fixed">
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>

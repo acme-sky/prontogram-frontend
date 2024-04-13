@@ -12,6 +12,7 @@ import Orders from './components/Orders.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import Dashboard2 from './components/Dashboard2.jsx';
 import Dashboard3 from './components/Dashboard3.jsx';
+import Dashboard4 from './components/Dashboard4.jsx'
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard2 />
+    element: <Dashboard4 />
   }
 ])
 ReactDOM.createRoot(document.getElementById('root')).render(

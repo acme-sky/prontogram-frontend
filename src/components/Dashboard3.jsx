@@ -34,18 +34,18 @@ const useStyles = makeStyles({
         borderRight: '1px solid #e0e0e0'
     },
     messageArea: {
-        height: '70vh',
+        height: '70%',
         overflowY: 'auto'
     },
     messageContainer: {
-        backgroundColor: 'rgba(61, 155, 250, 0.3)',
+        backgroundColor: 'rgba(0,136,204, 0.5)',
         padding: '10px',
         borderRadius: '25px',
         maxWidth: '60%',
         boxShadow: '5px 10px 5px lightgrey'
     },
     people:{
-        backgroundColor: 'rgba(0,136,204, 1)',
+        backgroundColor: 'rgba(0,0,250, 0.5)',
         borderRadius: '15px'
     }
 })

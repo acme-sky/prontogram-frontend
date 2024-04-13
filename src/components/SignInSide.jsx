@@ -103,7 +103,7 @@ export default function SignInSide() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: 'url(src/assets/logo-big.jpg)', //'url(https://source.unsplash.com/random?wallpapers)',
+              backgroundImage: 'url(src/assets/PRONTOGRAM.png)', //'url(https://source.unsplash.com/random?wallpapers)',
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
               backgroundSize: 'cover',
