@@ -35,7 +35,20 @@ const useStyles = makeStyles({
     },
     messageArea: {
         height: '70%',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+            width: '10px',
+        },
+        '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: '5px',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+        }
     },
     messageContainer: {
         backgroundColor: 'rgba(0,136,204, 0.5)',
@@ -55,10 +68,10 @@ export default function Chat(){
     const classes = useStyles();
     //const user = React.useContext(userContext)
     const user = localStorage.getItem('user')
-    const [messages, setMessages] = React.useState([])
+    const [messages, setMessages] = React.useState([''])
     const navigate = useNavigate()
 
-    React.useEffect(() => {
+
     const fetchData = async () => {
       try {
         const cookie = localStorage.getItem('session')
@@ -87,15 +100,16 @@ export default function Chat(){
       }
     };
 
-    fetchData();
-
-    // Clean-up function to cancel any ongoing requests (if necessary)
-    return () => {
-      // You can perform cleanup here if needed
-    };
-  }, [user, navigate]); // Empty dependency array ensures the effect runs only once after the initial render
+    //fetchData();
 
 
+    React.useEffect(() => {
+        fetchData();
+        const interval = setInterval(fetchData, 5000)
+        return () => {
+            clearInterval(interval)
+        };
+    }, [user]);
 
     return (
     <userContext.Provider value={user}>
@@ -132,7 +146,7 @@ export default function Chat(){
             </Grid>
             <Grid item xs={9}>
                 <List className={classes.messageArea}>
-                    {messages.map((message, index) => (
+                    {messages && messages.map((message, index) => (
                         <ListItem key={index}>
                             <Grid container>
                                 <Grid item xs={12}>
