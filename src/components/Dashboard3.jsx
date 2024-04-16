@@ -18,6 +18,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import * as React from 'react'
+import { BorderTop } from '@mui/icons-material'
 
 const useStyles = makeStyles({
     table:{
@@ -25,7 +26,8 @@ const useStyles = makeStyles({
     },
     chatSection: {
         width: '100%',
-        height: '100vh'
+        height: '100vh',
+        minWidth: '100%'
     },
     headBG: {
         backgroundColor: '#e0e0e0'
@@ -55,7 +57,29 @@ const useStyles = makeStyles({
         padding: '10px',
         borderRadius: '25px',
         maxWidth: '60%',
-        boxShadow: '5px 10px 5px lightgrey'
+        minWidth: '50%',
+        //boxShadow: '5px 10px 5px lightgrey',
+        position: 'relative',
+        borderLeft: '20px solid transparent',
+        borderRight:'20 px solid transparent',
+        borderBottom: '20 px solid rgba(0,136,204,0.5)'
+    },
+    bubble: {
+        border: '0.5px solid black',
+        borderRadius: '10px',
+        margin: '5px',
+        padding: '10px',
+        display: 'inline-block'
+    },
+    triangle: {
+        position: 'absolute',
+        bottom: '-14.5px',
+        left: '+1px',
+        width: '0',
+        height: '0',
+        borderLeft: '20px solid transparent',
+        borderRight: '20px solid transparent',
+        borderTop: '15px solid rgba(0,136,204, 0.5)', // Same color as container background
     },
     people:{
         backgroundColor: 'rgba(0,0,250, 0.5)',
@@ -70,7 +94,7 @@ export default function Chat(){
     const user = localStorage.getItem('user')
     const [messages, setMessages] = React.useState([''])
     const navigate = useNavigate()
-
+    const messageAreaRef = React.useRef(null)
 
     const fetchData = async () => {
       try {
@@ -90,7 +114,14 @@ export default function Chat(){
 
         // Make the request to the API endpoint with the cookie
         const response = await axios.get(`/api/getMessages/`+user);
-        setMessages(response.data.messages);
+
+        const current_ts = Date.now()
+
+        const valid_messages = response.data.messages.filter(message =>{
+            return message.expiring_date > current_ts
+        })
+        //setMessages(response.data.messages);
+        setMessages(valid_messages)
       } catch (error) {
         console.error('Error fetching data:', error);
         if (error.message == "User not authenticated"){
@@ -101,6 +132,12 @@ export default function Chat(){
     };
 
     //fetchData();
+
+    React.useEffect(() => {
+        if(messageAreaRef.current){
+            messageAreaRef.current.scrollTop = messageAreaRef.current.scrollHeight;
+        }
+    },[messages]);
 
 
     React.useEffect(() => {
@@ -120,7 +157,7 @@ export default function Chat(){
             </Grid>
         </Grid>
         <Grid container component={Paper} className={classes.chatSection}>
-            <Grid item xs={3} className={classes.borderRight500}>
+            <Grid item xs={2} className={classes.borderRight500}>
                 <List>
                     <ListItem button >
                         <ListItemIcon>
@@ -145,15 +182,19 @@ export default function Chat(){
                 </List>
             </Grid>
             <Grid item xs={9}>
-                <List className={classes.messageArea}>
+                <List className={classes.messageArea} ref={messageAreaRef}>
                     {messages && messages.map((message, index) => (
                         <ListItem key={index}>
                             <Grid container>
                                 <Grid item xs={12}>
-                                    <div className={classes.messageContainer} dangerouslySetInnerHTML={{ __html: message.full_text }}></div>
+                                    <div className={classes.messageContainer}>
+                                        <div className={classes.triangle}></div>
+                                        <div dangerouslySetInnerHTML={{__html: message.full_text}}></div>
+                                        {/*<div className={classes.messageContainer} dangerouslySetInnerHTML={{ __html: message.full_text }}></div>*/}
+                                    </div>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ListItemText align="right" secondary={message.arrived_timestamp}></ListItemText>
+                                    <ListItemText align="left" secondary={message.arrived_timestamp}></ListItemText>
                                 </Grid>
                             </Grid>
                         </ListItem>
