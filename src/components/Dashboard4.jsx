@@ -41,7 +41,7 @@ export default function Dashboard() {
           <Divider />
           {/* Content */}
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ flexGrow: 1}}>
               <Chat />
             </Box>
           </Box>
