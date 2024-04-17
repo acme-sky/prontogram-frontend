@@ -92,7 +92,7 @@ export default function Chat(){
     const classes = useStyles();
     //const user = React.useContext(userContext)
     const user = localStorage.getItem('user')
-    const [messages, setMessages] = React.useState([''])
+    const [messages, setMessages] = React.useState()
     const navigate = useNavigate()
     const messageAreaRef = React.useRef(null)
 
@@ -120,9 +120,14 @@ export default function Chat(){
         const valid_messages = response.data.messages.filter(message =>{
             return message.expiring_date > current_ts
         })
+        if(valid_messages.length > 0){
+            console.log(valid_messages)
+            setMessages(valid_messages)
+        }else{
+            setMessages()
+        }
         //setMessages(response.data.messages);
-        setMessages(valid_messages)
-      } catch (error) {
+              } catch (error) {
         console.error('Error fetching data:', error);
         if (error.message == "User not authenticated"){
           navigate("/login")
@@ -183,22 +188,29 @@ export default function Chat(){
             </Grid>
             <Grid item xs={9}>
                 <List className={classes.messageArea} ref={messageAreaRef}>
-                    {messages && messages.map((message, index) => (
-                        <ListItem key={index}>
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <div className={classes.messageContainer}>
-                                        <div className={classes.triangle}></div>
-                                        <div dangerouslySetInnerHTML={{__html: message.full_text}}></div>
-                                        {/*<div className={classes.messageContainer} dangerouslySetInnerHTML={{ __html: message.full_text }}></div>*/}
-                                    </div>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText align="left" secondary={message.arrived_timestamp}></ListItemText>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                    ))}
+                    {messages && messages.map((message, index) => {
+                        // Check if message is not an empty string
+                        //if(message.trim() !== '') {
+                        if (message.full_text && typeof message.full_text === 'string' && message.full_text.trim() !== '') {
+                        return (
+                                <ListItem key={index}>
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <div className={classes.messageContainer}>
+                                                <div className={classes.triangle}></div>
+                                                <div dangerouslySetInnerHTML={{__html: message.full_text}}></div>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <ListItemText align="left" secondary={message.arrived_timestamp}></ListItemText>
+                                        </Grid>
+                                    </Grid>
+                                </ListItem>
+                            );
+                        } else {
+                            return null; // Return null if message is empty
+                        }
+                    })}
                 </List>
                 <Divider />
                 <Grid container style={{padding: '20px'}}>
