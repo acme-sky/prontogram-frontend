@@ -1,6 +1,6 @@
 #root {
   width: 100%;
-  height: auto;
+  height: 100vh;
   overflow-y: hidden;
   margin: 0 auto;
   padding: 2rem;
