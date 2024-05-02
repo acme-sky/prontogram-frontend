@@ -7,6 +7,8 @@ server: {
     proxy: {
         "/api" : "http://localhost:8000",
       },
+    host: true,
+    port: 4173
     },
   plugins: [react()],
 })

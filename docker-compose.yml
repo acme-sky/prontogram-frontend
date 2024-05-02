@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  prontogram-frontend:
+    image: prontogram-frontend
+    container_name: prontogram-frontend
+    ports:
+      - 4173:4173
+    build:
+      dockerfile: ./Dockerfile
+    networks:
+      - prontogram-net
+
+networks:
+  prontogram-net:
+    name: prontogram-net
+    external: true
