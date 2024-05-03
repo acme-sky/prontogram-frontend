@@ -14,4 +14,4 @@ services:
 networks:
   prontogram-net:
     name: prontogram-net
-    external: true
+    driver: bridge
