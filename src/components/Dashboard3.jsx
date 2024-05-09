@@ -92,49 +92,70 @@ export default function Chat(){
     const classes = useStyles();
     //const user = React.useContext(userContext)
     const user = localStorage.getItem('user')
+    //console.log("DEBUG --- USER = "+user)
     const [messages, setMessages] = React.useState()
     const navigate = useNavigate()
     const messageAreaRef = React.useRef(null)
 
     const fetchData = async () => {
-      try {
-        const cookie = localStorage.getItem('session')
+    try {
+        const cookie = localStorage.getItem('session');
         // Check if cookie exists before making the request
         if (!cookie) {
-          //console.error('Cookie not found in session storage');
-          console.log('Cookie not found');
-          //popup error with redirection
-          Swal.fire({
+        console.log('Cookie not found');
+        // popup error with redirection
+        Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "User is not authenticated!",
             footer: '<a href="/login">Go to login page</a>'
-          });
+        });
+        return; // exit the function since user is not authenticated
         }
 
         // Make the request to the API endpoint with the cookie
-        const response = await axios.get(`/api/getMessages/`+user);
+        const response = await axios.get("/api/getMessages/"+user);
 
-        const current_ts = Date.now()
+        const current_ts = Date.now();
+        let messagesArray = [];
 
-        const valid_messages = response.data.messages.filter(message =>{
-            return message.expiring_date > current_ts
-        })
-        if(valid_messages.length > 0){
-            console.log(valid_messages)
-            setMessages(valid_messages)
-        }else{
-            setMessages()
+        // Check if there are messages
+        if (response.data.messages) {
+        if (Array.isArray(response.data.messages)) {
+            // If messages is already an array, use it as is
+            messagesArray = response.data.messages;
+            console.log("array")
+        } else {
+            // If messages is not an array, convert it to an array with a single message
+            messagesArray = [response.data.messages];
+            console.log("conversion -> array")
         }
-        //setMessages(response.data.messages);
-              } catch (error) {
+
+        // Filter out the valid messages
+        const validMessages = messagesArray.filter(message => {
+            return message.expiring_date > current_ts;
+        });
+
+        // Check if there are any valid messages
+        if (validMessages.length > 0) {
+            console.log(validMessages);
+            setMessages(validMessages);
+        } else {
+            setMessages([]); // No valid messages
+        }
+        } else {
+        setMessages([]); // No messages
+        }
+    } catch (error) {
         console.error('Error fetching data:', error);
-        if (error.message == "User not authenticated"){
-          navigate("/login")
-          throw new Error("User not authenticated")
+        if (error.message === "User not authenticated") {
+        navigate("/login");
+        throw new Error("User not authenticated");
         }
-      }
+    }
     };
+
+
 
     //fetchData();
 
@@ -147,7 +168,7 @@ export default function Chat(){
 
     React.useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 5000)
+        const interval = setInterval(fetchData, 10000)
         return () => {
             clearInterval(interval)
         };

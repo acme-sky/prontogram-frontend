@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import logo from '/src/assets/PRONTOGRAM.png'
 
 function Copyright(props) {
   return (
@@ -39,10 +40,10 @@ export default function SignInSide() {
   const navigate = useNavigate()
 
   // useEffect to log the effect of setUser
-  React.useEffect(() => {
+  /*React.useEffect(() => {
       console.log("User set to:", user);
     }, [user]); // Run the effect whenever 'user' changes
-
+    */
   
 
 
@@ -103,7 +104,7 @@ export default function SignInSide() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: 'url(src/assets/PRONTOGRAM.png)', //'url(https://source.unsplash.com/random?wallpapers)',
+              backgroundImage: logo,
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
               backgroundSize: 'cover',
