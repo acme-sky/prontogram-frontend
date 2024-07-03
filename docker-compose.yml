@@ -10,8 +10,11 @@ services:
       dockerfile: ./Dockerfile
     networks:
       - prontogram-net
+      - acmesky
 
 networks:
   prontogram-net:
     name: prontogram-net
     driver: bridge
+  acmesky:
+    external: true
