@@ -69,7 +69,8 @@ export default function SignInSide() {
 
   const postData = {
     username: data.get('username'),
-    password: data.get('password')
+    password: data.get('password'),
+    sid: "  "
   };
     try {
       const response = await axios.post("/api/login", postData, {
