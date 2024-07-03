@@ -1,8 +1,17 @@
-# React + Vite
+# Prontogram Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Deploy with Docker compose
 
-Currently, two official plugins are available:
+First, build the local image
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+docker build -t prontogram-frontend .
+```
+
+Finally, run
+
+```
+docker compose up
+```
+
+It is exposed at `http://prontogram-frontend/` and uses the backend at `http://prontogram:8000/`.
