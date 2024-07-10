@@ -15,20 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import logo from '/src/assets/PRONTOGRAM.png'
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import logo from '../assets/PRONTOGRAM.png'
 
 export const userContext = React.createContext()
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -39,7 +26,7 @@ export default function SignInSide() {
   const [error, setError] = React.useState(null);
   const navigate = useNavigate()
 
-  // useEffect to log the effect of setUser
+  // useEffect to log the effect of setUser 
   /*React.useEffect(() => {
       console.log("User set to:", user);
     }, [user]); // Run the effect whenever 'user' changes
@@ -97,7 +84,7 @@ export default function SignInSide() {
   return (
     <userContext.Provider value={user}>
       <ThemeProvider theme={defaultTheme}>
-        <Grid container component="main" sx={{ height: 'auto', width:'50%', marginLeft: 'auto', marginRight:'auto' }}>
+        <Grid container component="main" sx={{ height: 'auto', width:'50%', marginLeft: 'auto', marginRight:'auto'}}>
           <CssBaseline />
           <Grid
             item
@@ -105,7 +92,7 @@ export default function SignInSide() {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: logo,
+              backgroundImage: `url(${logo})`,
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) => t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
               backgroundSize: 'cover',
