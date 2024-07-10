@@ -62,7 +62,8 @@ export default function SignUp() {
         username: data.get('username'),
         password: data.get('password'),
         name: data.get('firstName'),
-        surname: data.get('lastName')
+        surname: data.get('lastName'),
+        sid: ''
     };
 
     try {
